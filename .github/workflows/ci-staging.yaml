@@ -9,12 +9,17 @@ jobs:
     name: Deploy to the staging cluster
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
-          ssh -i ~/ssh_key root@35.175.193.89
-          cd monorepo-deployment/ && git pull
-          pnpm install
-          pnpm run build
-          pm2 restart fe-server
-          pm2 restart ws-server
-          pm2 restart http-server
+      - name: Deplou via SSH
+        uses: appleboy/ssh-action@v1/v1.2.0
+        with:
+          host: 35.175.193.89
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd monorepo-deployment/
+            git pull
+            pnpm install
+            pnpm run build
+            pm2 restart fe-server
+            pm2 restart ws-server
+            pm2 restart http-server
