@@ -8,6 +8,7 @@ export default async function Home() {
 
   return (
     <div>
+      <h1>Testing deployment via ci/cd</h1>
       {user?.username}
       {user?.password}
     </div>
